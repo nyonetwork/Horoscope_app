@@ -1,6 +1,8 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/utils/zodiac_utils.dart';
+import 'package:horoscope_app/widgets/app_page_header.dart';
+import 'package:horoscope_app/widgets/birth_date_picker_sheet.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
@@ -9,16 +11,25 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final appState = AppStateScope.of(context);
     final birthdate = appState.birthdate;
+    final today = DateTime.now();
+    final todayLabel =
+        '${today.year}.${today.month.toString().padLeft(2, '0')}.${today.day.toString().padLeft(2, '0')}';
 
     return SafeArea(
       child: ListView(
         padding: const EdgeInsets.fromLTRB(20, 28, 20, 120),
         children: [
-          Text('Profile', style: Theme.of(context).textTheme.titleLarge),
-          const SizedBox(height: 6),
-          const Text(
-            'Manage your sign, Premium state, and privacy settings.',
-            style: TextStyle(color: Color(0xFFAFB8DC)),
+          AppPageHeader(
+            section: 'Profile',
+            title: 'Profile & Settings',
+            subtitle: 'Manage your sign, premium state, and preferences.',
+            chips: [
+              HeaderChip(
+                icon: Icons.auto_awesome_rounded,
+                label: ZodiacUtils.displayName(appState.selectedZodiac),
+              ),
+              HeaderChip(icon: Icons.event_rounded, label: todayLabel),
+            ],
           ),
           const SizedBox(height: 20),
           _sectionCard(
@@ -51,12 +62,11 @@ class SettingsScreen extends StatelessWidget {
                 const SizedBox(height: 12),
                 OutlinedButton.icon(
                   onPressed: () async {
-                    final selected = await showDatePicker(
-                      context: context,
+                    final selected = await showBirthDatePickerSheet(
+                      context,
                       initialDate: birthdate ?? DateTime(2000, 1, 1),
-                      firstDate: DateTime(1950),
-                      lastDate: DateTime.now(),
-                      helpText: 'Birth date',
+                      minimumDate: DateTime(1950),
+                      maximumDate: DateTime.now(),
                     );
                     if (selected != null) {
                       await appState.setBirthdate(selected);
@@ -84,9 +94,9 @@ class SettingsScreen extends StatelessWidget {
                 const SizedBox(height: 4),
                 Text(
                   appState.isPremium
-                      ? 'Enabled: daily horoscope and detailed compatibility explanation'
-                      : 'Disabled: premium content is locked',
-                  style: const TextStyle(color: Color(0xFFD5DAF0)),
+                      ? 'Enabled: daily horoscope and detailed compatibility explanation.'
+                      : 'Disabled: premium content is locked.',
+                  style: const TextStyle(color: Color(0xFFE0E7FF), height: 1.5),
                 ),
                 const SizedBox(height: 10),
                 SwitchListTile.adaptive(
@@ -103,7 +113,9 @@ class SettingsScreen extends StatelessWidget {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                            content: Text('Purchase restored. Premium enabled.'),
+                            content: Text(
+                              'Purchase restored. Premium enabled.',
+                            ),
                           ),
                         );
                       }
@@ -111,6 +123,33 @@ class SettingsScreen extends StatelessWidget {
                     icon: const Icon(Icons.restore_rounded),
                     label: const Text('Restore purchase'),
                   ),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(height: 12),
+          _sectionCard(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Text(
+                  'Experience',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Adjust visual motion and readability behavior.',
+                  style: TextStyle(color: Color(0xFFE0E7FF), height: 1.5),
+                ),
+                const SizedBox(height: 8),
+                SwitchListTile.adaptive(
+                  title: const Text('Reduce background motion'),
+                  subtitle: const Text(
+                    'Uses calmer star movement and fewer effects',
+                  ),
+                  value: appState.reduceMotion,
+                  onChanged: (value) => appState.setReduceMotion(value),
+                  contentPadding: EdgeInsets.zero,
                 ),
               ],
             ),
@@ -128,7 +167,7 @@ class SettingsScreen extends StatelessWidget {
                 Text(
                   'Your birth date and sign are stored locally on this device only. '
                   'In this MVP version, no personal data is sent to a server.',
-                  style: TextStyle(color: Color(0xFFD5DAF0)),
+                  style: TextStyle(color: Color(0xFFE0E7FF), height: 1.5),
                 ),
               ],
             ),
