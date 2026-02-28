@@ -5,6 +5,7 @@ class AppPageHeader extends StatelessWidget {
   final String title;
   final String subtitle;
   final List<Widget> chips;
+  final Widget? trailing;
 
   const AppPageHeader({
     super.key,
@@ -12,6 +13,7 @@ class AppPageHeader extends StatelessWidget {
     required this.title,
     required this.subtitle,
     this.chips = const [],
+    this.trailing,
   });
 
   @override
@@ -19,14 +21,22 @@ class AppPageHeader extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          section.toUpperCase(),
-          style: const TextStyle(
-            color: Color(0xFFB9C5EE),
-            fontSize: 12,
-            letterSpacing: 1.1,
-            fontWeight: FontWeight.w600,
-          ),
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Text(
+                section.toUpperCase(),
+                style: const TextStyle(
+                  color: Color(0xFFB9C5EE),
+                  fontSize: 12,
+                  letterSpacing: 1.1,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            trailing ?? const SizedBox.shrink(),
+          ],
         ),
         const SizedBox(height: 6),
         Text(title, style: Theme.of(context).textTheme.titleLarge),
@@ -40,6 +50,39 @@ class AppPageHeader extends StatelessWidget {
           Wrap(spacing: 8, runSpacing: 8, children: chips),
         ],
       ],
+    );
+  }
+}
+
+class HeaderIconButton extends StatelessWidget {
+  final IconData icon;
+  final VoidCallback onTap;
+  final String? tooltip;
+
+  const HeaderIconButton({
+    super.key,
+    required this.icon,
+    required this.onTap,
+    this.tooltip,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Tooltip(
+      message: tooltip ?? 'Open',
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(14),
+        child: Container(
+          padding: const EdgeInsets.all(8),
+          decoration: BoxDecoration(
+            color: const Color(0xFF111832).withValues(alpha: 0.9),
+            borderRadius: BorderRadius.circular(14),
+            border: Border.all(color: const Color(0xFF304172)),
+          ),
+          child: Icon(icon, size: 18, color: const Color(0xFFE4EAFF)),
+        ),
+      ),
     );
   }
 }

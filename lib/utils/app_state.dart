@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horoscope_app/data/horoscope_repository.dart';
 import 'package:horoscope_app/utils/local_storage.dart';
 import 'package:horoscope_app/utils/zodiac_utils.dart';
 
@@ -11,6 +12,9 @@ class AppState extends ChangeNotifier {
   String? _initError;
   int _streakCount = 0;
   DateTime? _lastCheckInDate;
+  Map<String, String>? _dailyHoroscope;
+  bool _isHoroscopeLoading = false;
+  String? _horoscopeError;
 
   DateTime? get birthdate => _birthdate;
   String get selectedZodiac => _selectedZodiac;
@@ -19,6 +23,9 @@ class AppState extends ChangeNotifier {
   bool get isReady => _isReady;
   String? get initError => _initError;
   int get streakCount => _streakCount;
+  Map<String, String>? get dailyHoroscope => _dailyHoroscope;
+  bool get isHoroscopeLoading => _isHoroscopeLoading;
+  String? get horoscopeError => _horoscopeError;
   bool get needsOnboarding => _birthdate == null;
   bool get didCheckInToday {
     if (_lastCheckInDate == null) return false;
@@ -68,6 +75,9 @@ class AppState extends ChangeNotifier {
       _lastCheckInDate = null;
     }
     _isReady = true;
+    if (!needsOnboarding) {
+      await loadDailyHoroscope();
+    }
     notifyListeners();
   }
 
@@ -80,13 +90,45 @@ class AppState extends ChangeNotifier {
     _selectedZodiac = ZodiacUtils.getZodiac(date);
     await LocalStorage.saveBirthdate(date);
     await LocalStorage.saveSelectedZodiac(_selectedZodiac);
+    await loadDailyHoroscope();
     notifyListeners();
   }
 
   Future<void> setSelectedZodiac(String zodiac) async {
     _selectedZodiac = zodiac;
     await LocalStorage.saveSelectedZodiac(zodiac);
+    await loadDailyHoroscope();
     notifyListeners();
+  }
+
+  Future<void> loadDailyHoroscope({bool forceRefresh = false}) async {
+    if (_isHoroscopeLoading) return;
+    _isHoroscopeLoading = true;
+    _horoscopeError = null;
+    notifyListeners();
+    try {
+      if (!forceRefresh) {
+        final cached = await HoroscopeRepository.getCachedDaily(
+          _selectedZodiac,
+        );
+        if (cached != null) {
+          _dailyHoroscope = cached;
+        }
+      }
+      final fresh = await HoroscopeRepository.fetchDaily(_selectedZodiac);
+      _dailyHoroscope = fresh;
+    } catch (_) {
+      final cached = await HoroscopeRepository.getCachedDaily(_selectedZodiac);
+      if (cached != null) {
+        _dailyHoroscope = cached;
+      } else {
+        _dailyHoroscope = null;
+        _horoscopeError = 'Could not load your daily horoscope.';
+      }
+    } finally {
+      _isHoroscopeLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> markDailyCheckIn() async {
