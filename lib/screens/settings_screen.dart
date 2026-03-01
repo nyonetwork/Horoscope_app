@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:horoscope_app/screens/premium_screen.dart';
 import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/utils/zodiac_utils.dart';
 import 'package:horoscope_app/widgets/birth_date_picker_sheet.dart';
@@ -33,12 +34,13 @@ class SettingsScreen extends StatelessWidget {
           const SizedBox(height: 12),
           _menuGroup(
             children: [
-              SwitchListTile.adaptive(
-                secondary: const Icon(Icons.workspace_premium_rounded),
-                title: const Text('Premium'),
-                subtitle: Text(appState.isPremium ? 'Enabled' : 'Disabled'),
-                value: appState.isPremium,
-                onChanged: (value) => appState.setPremiumStatus(value),
+              _menuTile(
+                icon: Icons.workspace_premium_rounded,
+                title: appState.isPremium ? 'Premium active' : 'Upgrade to Premium',
+                subtitle: appState.isPremium
+                    ? 'Manage your premium plan'
+                    : 'Unlock tomorrow readings and detailed match insights',
+                onTap: () => _openPremium(context),
               ),
               const Divider(height: 1),
               _menuTile(
@@ -46,7 +48,7 @@ class SettingsScreen extends StatelessWidget {
                 title: 'Restore purchase',
                 subtitle: 'Enable premium if already purchased',
                 onTap: () async {
-                  await appState.setPremiumStatus(true);
+                  await appState.setPremiumStatus(true); // placeholder restore
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Purchase restored.')),
@@ -125,6 +127,12 @@ class SettingsScreen extends StatelessWidget {
       trailing: const Icon(Icons.chevron_right_rounded),
       onTap: onTap,
     );
+  }
+
+  void _openPremium(BuildContext context) {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const PremiumScreen()));
   }
 
   Future<void> _openProfileSheet(

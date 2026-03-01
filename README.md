@@ -1,17 +1,43 @@
-# horoscope_app
+# Horoscope App
 
-A new Flutter project.
+Mobile horoscope app built with Flutter.
 
-## Getting Started
+## What It Does
 
-This project is a starting point for a Flutter application.
+- Onboards users by birth date and auto-detects zodiac sign
+- Shows daily horoscope cards (yesterday/today/tomorrow)
+- Tracks daily streak check-ins
+- Calculates compatibility score from two birth dates
+- Supports a local premium mode gate for extra details
 
-A few resources to get you started if this is your first Flutter project:
+## Tech Stack
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+- Flutter / Dart
+- `shared_preferences` for local persistence
+- Optional HTTP horoscope endpoint (if configured)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Run Locally
+
+```bash
+flutter pub get
+flutter run
+```
+
+## Optional API Configuration
+
+The app can use a remote daily horoscope endpoint if these compile-time values are provided:
+
+- `HOROSCOPE_API_BASE_URL`
+- `HOROSCOPE_API_KEY` (optional, if your endpoint requires auth)
+
+Example:
+
+```bash
+flutter run --dart-define=HOROSCOPE_API_BASE_URL=https://your-api.example.com --dart-define=HOROSCOPE_API_KEY=your_key
+```
+
+## Screenshot
+
+Add a screenshot here later, for example:
+
+- `docs/home-screen.png`

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:horoscope_app/screens/main_navigation.dart';
 import 'package:horoscope_app/screens/onboarding_screen.dart';
 import 'package:horoscope_app/utils/app_state.dart';
+import 'package:horoscope_app/theme/app_colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,18 +38,18 @@ class _MyAppState extends State<MyApp> {
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           brightness: Brightness.dark,
-          scaffoldBackgroundColor: const Color(0xFF06070D),
+          scaffoldBackgroundColor: AppColors.scaffoldBackground,
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color(0xFF7C7BFF),
+            seedColor: AppColors.seed,
             brightness: Brightness.dark,
           ),
-          cardColor: const Color(0xFF111321),
+          cardColor: AppColors.card,
           elevatedButtonTheme: ElevatedButtonThemeData(
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFF6F7BFF),
+              backgroundColor: AppColors.buttonPrimary,
               foregroundColor: Colors.white,
-              disabledBackgroundColor: const Color(0xFF40455E),
-              disabledForegroundColor: const Color(0xFFC0C7E8),
+              disabledBackgroundColor: AppColors.buttonDisabled,
+              disabledForegroundColor: AppColors.buttonDisabledForeground,
               minimumSize: const Size.fromHeight(52),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -61,8 +62,8 @@ class _MyAppState extends State<MyApp> {
           ),
           outlinedButtonTheme: OutlinedButtonThemeData(
             style: OutlinedButton.styleFrom(
-              foregroundColor: const Color(0xFFE6EBFF),
-              side: const BorderSide(color: Color(0xFF3A4775)),
+              foregroundColor: AppColors.outlineForeground,
+              side: const BorderSide(color: AppColors.outlineBorder),
               minimumSize: const Size.fromHeight(52),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -79,7 +80,7 @@ class _MyAppState extends State<MyApp> {
             bodyMedium: TextStyle(
               fontSize: 15,
               height: 1.55,
-              color: Color(0xFFE0E7FF),
+              color: AppColors.textBody,
             ),
           ),
         ),
@@ -112,7 +113,9 @@ class _MyAppState extends State<MyApp> {
                           Text(
                             _appState.initError!,
                             textAlign: TextAlign.center,
-                            style: const TextStyle(color: Color(0xFFD7DFFD)),
+                            style: const TextStyle(
+                              color: AppColors.textErrorBody,
+                            ),
                           ),
                           const SizedBox(height: 16),
                           ElevatedButton(
@@ -134,7 +137,7 @@ class _MyAppState extends State<MyApp> {
                       SizedBox(height: 12),
                       Text(
                         'Loading your cosmic profile...',
-                        style: TextStyle(color: Color(0xFFD9E1FF)),
+                        style: TextStyle(color: AppColors.textLoadingBody),
                       ),
                     ],
                   ),

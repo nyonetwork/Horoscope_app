@@ -3,17 +3,15 @@ import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/utils/zodiac_utils.dart';
 import 'package:horoscope_app/widgets/app_page_header.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   final VoidCallback onOpenSettings;
+  final VoidCallback onOpenPremium;
 
-  const HomeScreen({super.key, required this.onOpenSettings});
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  String _expandedSection = 'Today';
+  const HomeScreen({
+    super.key,
+    required this.onOpenSettings,
+    required this.onOpenPremium,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
             subtitle: 'Your personalized reading for today.',
             trailing: HeaderIconButton(
               icon: Icons.settings_rounded,
-              onTap: widget.onOpenSettings,
+              onTap: onOpenSettings,
               tooltip: 'Settings',
             ),
             chips: [
@@ -51,8 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           const SizedBox(height: 10),
-          _checkInCard(context, appState),
-          const SizedBox(height: 14),
+          AnimatedSwitcher(
+            duration: const Duration(milliseconds: 220),
+            switchInCurve: Curves.easeOutCubic,
+            switchOutCurve: Curves.easeInCubic,
+            child: appState.didCheckInToday
+                ? const SizedBox.shrink()
+                : _checkInCard(context, appState),
+          ),
+          if (!appState.didCheckInToday) const SizedBox(height: 14),
           _symbolHero(sign: sign),
           const SizedBox(height: 16),
           if (appState.isHoroscopeLoading && dailyData == null)
@@ -61,9 +66,17 @@ class _HomeScreenState extends State<HomeScreen> {
             _missingContentCard(context, appState)
           else ...[
             _todayHeroCard(
+              context,
               content:
                   dailyData['today'] ?? 'Your cosmic guidance is warming up.',
               sign: sign,
+              mood: dailyData['today_mood'] ?? 'Mood is steady and clear.',
+              career:
+                  dailyData['today_career'] ??
+                  'Career/Job: focus on one meaningful task.',
+              love:
+                  dailyData['today_love'] ??
+                  'Love: a simple honest message helps today.',
             ),
             const SizedBox(height: 20),
             const Text(
@@ -82,6 +95,14 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: Icons.history_toggle_off_rounded,
               accent: const Color(0xFFBBD1FF),
               sign: sign,
+              mood:
+                  dailyData['yesterday_mood'] ?? 'Mood was balanced and calm.',
+              career:
+                  dailyData['yesterday_career'] ??
+                  'Career/Job: your consistency helped progress.',
+              love:
+                  dailyData['yesterday_love'] ??
+                  'Love: a warm check-in improved connection.',
             ),
             const SizedBox(height: 14),
             if (appState.isPremium)
@@ -92,6 +113,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 icon: Icons.auto_awesome_rounded,
                 accent: const Color(0xFFE2C7FF),
                 sign: sign,
+                mood: dailyData['tomorrow_mood'] ?? 'Mood looks optimistic.',
+                career:
+                    dailyData['tomorrow_career'] ??
+                    'Career/Job: set one practical priority.',
+                love:
+                    dailyData['tomorrow_love'] ??
+                    'Love: clear words can strengthen the bond.',
               )
             else
               _lockedTomorrowCard(context),
@@ -151,8 +179,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _checkInCard(BuildContext context, AppState appState) {
-    final checkedIn = appState.didCheckInToday;
     return Container(
+      key: const ValueKey('check-in-card'),
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: const Color(0xFF0D1228).withValues(alpha: 0.86),
@@ -165,9 +193,7 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(width: 10),
           Expanded(
             child: Text(
-              checkedIn
-                  ? 'Checked in today. Keep your streak alive tomorrow.'
-                  : 'Daily check-in is ready. Claim today to build your streak.',
+              'Daily check-in is ready. Claim today to build your streak.',
               style: const TextStyle(color: Color(0xFFE3EAFF), height: 1.45),
             ),
           ),
@@ -181,16 +207,22 @@ class _HomeScreenState extends State<HomeScreen> {
                 fontWeight: FontWeight.w500,
               ),
             ),
-            onPressed: checkedIn ? null : appState.markDailyCheckIn,
-            child: Text(checkedIn ? 'Done' : 'Check in'),
+            onPressed: appState.markDailyCheckIn,
+            child: const Text('Check in'),
           ),
         ],
       ),
     );
   }
 
-  Widget _todayHeroCard({required String content, required String sign}) {
-    final isExpanded = _expandedSection == 'Today';
+  Widget _todayHeroCard(
+    BuildContext context, {
+    required String content,
+    required String sign,
+    required String mood,
+    required String career,
+    required String love,
+  }) {
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 14, end: 0),
       duration: const Duration(milliseconds: 520),
@@ -200,7 +232,16 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: InkWell(
         borderRadius: BorderRadius.circular(24),
-        onTap: () => _toggleSection('Today'),
+        onTap: () => _openReadingOverlay(
+          context,
+          section: 'Today',
+          sign: sign,
+          general: content,
+          emoji: '\u{2728}',
+          mood: mood,
+          career: career,
+          love: love,
+        ),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -225,11 +266,11 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
+              const Row(
                 children: [
-                  const Icon(Icons.wb_sunny_rounded, color: Color(0xFFFFDDA5)),
-                  const SizedBox(width: 10),
-                  const Expanded(
+                  Icon(Icons.wb_sunny_rounded, color: Color(0xFFFFDDA5)),
+                  SizedBox(width: 10),
+                  Expanded(
                     child: Text(
                       'Today',
                       style: TextStyle(
@@ -238,11 +279,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                   ),
-                  AnimatedRotation(
-                    turns: isExpanded ? 0.5 : 0,
-                    duration: const Duration(milliseconds: 220),
-                    child: const Icon(Icons.keyboard_arrow_down_rounded),
-                  ),
+                  Icon(Icons.open_in_full_rounded, size: 18),
                 ],
               ),
               const SizedBox(height: 14),
@@ -254,17 +291,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
-              ),
-              AnimatedCrossFade(
-                duration: const Duration(milliseconds: 220),
-                firstChild: const SizedBox.shrink(),
-                secondChild: Padding(
-                  padding: const EdgeInsets.only(top: 12),
-                  child: _detailPanel(section: 'Today', emoji: '?', sign: sign),
-                ),
-                crossFadeState: isExpanded
-                    ? CrossFadeState.showSecond
-                    : CrossFadeState.showFirst,
               ),
             ],
           ),
@@ -304,7 +330,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               const SizedBox(width: 10),
               OutlinedButton(
-                onPressed: widget.onOpenSettings,
+                onPressed: onOpenSettings,
                 child: const Text('Open Settings'),
               ),
             ],
@@ -348,17 +374,28 @@ class _HomeScreenState extends State<HomeScreen> {
     required IconData icon,
     required Color accent,
     required String sign,
+    required String mood,
+    required String career,
+    required String love,
   }) {
-    final isExpanded = _expandedSection == section;
     final emoji = section == 'Yesterday'
-        ? '??'
+        ? '\u{1FA90}'
         : section == 'Tomorrow'
-        ? '??'
-        : '?';
+        ? '\u{1F319}'
+        : '\u{2728}';
 
     return InkWell(
       borderRadius: BorderRadius.circular(22),
-      onTap: () => _toggleSection(section),
+      onTap: () => _openReadingOverlay(
+        context,
+        section: section,
+        sign: sign,
+        general: content,
+        emoji: emoji,
+        mood: mood,
+        career: career,
+        love: love,
+      ),
       child: Container(
         padding: const EdgeInsets.all(18),
         decoration: BoxDecoration(
@@ -395,26 +432,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
                 ),
-                AnimatedRotation(
-                  turns: isExpanded ? 0.5 : 0,
-                  duration: const Duration(milliseconds: 220),
-                  child: const Icon(Icons.keyboard_arrow_down_rounded),
-                ),
+                const Icon(Icons.open_in_full_rounded, size: 18),
               ],
             ),
             const SizedBox(height: 12),
             Text(content, style: Theme.of(context).textTheme.bodyMedium),
-            AnimatedCrossFade(
-              duration: const Duration(milliseconds: 220),
-              firstChild: const SizedBox.shrink(),
-              secondChild: Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: _detailPanel(section: section, emoji: emoji, sign: sign),
-              ),
-              crossFadeState: isExpanded
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
-            ),
           ],
         ),
       ),
@@ -453,14 +475,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           const SizedBox(height: 6),
           const Text(
-            'Open Settings to enable Premium.',
+            'Upgrade to Premium to unlock tomorrow.',
             style: TextStyle(color: Color(0xFFE6C9D8), fontSize: 12),
           ),
           const SizedBox(height: 14),
           TextButton.icon(
-            onPressed: widget.onOpenSettings,
+            onPressed: onOpenPremium,
             icon: const Icon(Icons.stars_rounded),
-            label: const Text('Go to Settings to activate Premium'),
+            label: const Text('Upgrade to Premium'),
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFFFFD9A4),
               padding: EdgeInsets.zero,
@@ -471,107 +493,121 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  Widget _detailPanel({
+  Future<void> _openReadingOverlay(
+    BuildContext context, {
     required String section,
-    required String emoji,
     required String sign,
-  }) {
-    final mood = _pick(
-      [
-        'Optimistic and focused',
-        'Calm but determined',
-        'Curious and energetic',
-        'Emotionally clear',
-        'Bold and open-minded',
-      ],
-      sign,
-      section,
-      1,
+    required String general,
+    required String emoji,
+    required String mood,
+    required String career,
+    required String love,
+  }) async {
+    await showGeneralDialog<void>(
+      context: context,
+      barrierLabel: 'Reading',
+      barrierDismissible: true,
+      barrierColor: const Color(0xB50A0F22),
+      transitionDuration: const Duration(milliseconds: 260),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return SafeArea(
+          child: Material(
+            color: Colors.transparent,
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(12, 12, 12, 12),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: const Color(0xFF0A1026),
+                  borderRadius: BorderRadius.circular(22),
+                  border: Border.all(color: const Color(0xFF334B88)),
+                ),
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
+                      child: Row(
+                        children: [
+                          Text(emoji, style: const TextStyle(fontSize: 22)),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              '$section Reading',
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          IconButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            icon: const Icon(Icons.close_rounded),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Divider(height: 1, color: Color(0xFF2F406F)),
+                    Expanded(
+                      child: ListView(
+                        padding: const EdgeInsets.fromLTRB(14, 14, 14, 18),
+                        children: [
+                          _detailBlock(
+                            title: 'General Horoscope',
+                            content: general,
+                          ),
+                          const SizedBox(height: 12),
+                          _detailBlock(title: 'Mood', content: mood),
+                          const SizedBox(height: 12),
+                          _detailBlock(title: 'Career', content: career),
+                          const SizedBox(height: 12),
+                          _detailBlock(title: 'Love', content: love),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+      transitionBuilder: (context, animation, _, child) {
+        final slide =
+            Tween<Offset>(
+              begin: const Offset(0, 0.08),
+              end: Offset.zero,
+            ).animate(
+              CurvedAnimation(parent: animation, curve: Curves.easeOutCubic),
+            );
+        return FadeTransition(
+          opacity: animation,
+          child: SlideTransition(position: slide, child: child),
+        );
+      },
     );
-    final career = _pick(
-      [
-        'A small initiative can get noticed.',
-        'Team communication works in your favor.',
-        'Finish one key task before multitasking.',
-        'A practical decision saves time.',
-        'Good moment to pitch an idea.',
-      ],
-      sign,
-      section,
-      2,
-    );
-    final love = _pick(
-      [
-        'Honest words will land well.',
-        'A simple check-in strengthens connection.',
-        'Stay playful and light in conversations.',
-        'Listening first will improve the vibe.',
-        'A thoughtful message can shift the day.',
-      ],
-      sign,
-      section,
-      3,
-    );
+  }
 
+  Widget _detailBlock({required String title, required String content}) {
     return Container(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0x59101831),
+        color: const Color(0xFF111832).withValues(alpha: 0.9),
         borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: const Color(0xFF3A4D86)),
+        border: Border.all(color: const Color(0xFF344A83)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '$emoji Quick detail',
-            style: const TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFE8EEFF),
-            ),
+            title,
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w700),
           ),
-          const SizedBox(height: 8),
-          _detailLine('Mood', mood),
-          const SizedBox(height: 4),
-          _detailLine('Career', career),
-          const SizedBox(height: 4),
-          _detailLine('Love', love),
-        ],
-      ),
-    );
-  }
-
-  Widget _detailLine(String label, String value) {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: '$label: ',
-            style: const TextStyle(
-              fontWeight: FontWeight.w600,
-              color: Color(0xFFE6ECFF),
-            ),
-          ),
-          TextSpan(
-            text: value,
-            style: const TextStyle(color: Color(0xFFD6DFFD), height: 1.45),
+          const SizedBox(height: 6),
+          Text(
+            content,
+            style: const TextStyle(color: Color(0xFFE3EAFF), height: 1.52),
           ),
         ],
       ),
     );
-  }
-
-  String _pick(List<String> options, String sign, String section, int salt) {
-    final signScore = sign.codeUnits.fold<int>(0, (sum, c) => sum + c);
-    final sectionScore = section.codeUnits.fold<int>(0, (sum, c) => sum + c);
-    final index = (signScore + sectionScore + (salt * 13)) % options.length;
-    return options[index];
-  }
-
-  void _toggleSection(String section) {
-    setState(() {
-      _expandedSection = _expandedSection == section ? '' : section;
-    });
   }
 }

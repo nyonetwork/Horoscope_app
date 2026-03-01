@@ -50,7 +50,7 @@ class AppState extends ChangeNotifier {
           ? 'Aries'
           : ZodiacUtils.getZodiac(_birthdate!);
       _selectedZodiac = ZodiacUtils.allSigns.contains(savedSign)
-          ? savedSign!
+          ? (savedSign ?? fallbackSign)
           : fallbackSign;
     } catch (_) {
       _selectedZodiac = _birthdate == null
@@ -115,7 +115,10 @@ class AppState extends ChangeNotifier {
           _dailyHoroscope = cached;
         }
       }
-      final fresh = await HoroscopeRepository.fetchDaily(_selectedZodiac);
+      final fresh = await HoroscopeRepository.fetchDaily(
+        _selectedZodiac,
+        date: DateTime.now(),
+      );
       _dailyHoroscope = fresh;
     } catch (_) {
       final cached = await HoroscopeRepository.getCachedDaily(_selectedZodiac);

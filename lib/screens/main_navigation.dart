@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:horoscope_app/screens/compatibility_screen.dart';
 import 'package:horoscope_app/screens/home_screen.dart';
+import 'package:horoscope_app/screens/premium_screen.dart';
 import 'package:horoscope_app/screens/settings_screen.dart';
 import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/widgets/cosmic_background.dart';
@@ -21,12 +22,21 @@ class _MainNavigationState extends State<MainNavigation> {
     ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
   }
 
+  void _openPremium() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const PremiumScreen()));
+  }
+
   @override
   Widget build(BuildContext context) {
     final appState = AppStateScope.of(context);
     final screens = [
-      HomeScreen(onOpenSettings: _openSettings),
-      const CompatibilityScreen(),
+      HomeScreen(onOpenSettings: _openSettings, onOpenPremium: _openPremium),
+      CompatibilityScreen(
+        onOpenSettings: _openSettings,
+        onOpenPremium: _openPremium,
+      ),
     ];
 
     return Scaffold(
