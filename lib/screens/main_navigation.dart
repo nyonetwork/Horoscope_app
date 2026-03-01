@@ -15,17 +15,18 @@ class MainNavigation extends StatefulWidget {
 class _MainNavigationState extends State<MainNavigation> {
   int _selectedIndex = 0;
 
-  void _openProfileTab() {
-    setState(() => _selectedIndex = 2);
+  void _openSettings() {
+    Navigator.of(
+      context,
+    ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
   }
 
   @override
   Widget build(BuildContext context) {
     final appState = AppStateScope.of(context);
     final screens = [
-      HomeScreen(onOpenProfile: _openProfileTab),
+      HomeScreen(onOpenSettings: _openSettings),
       const CompatibilityScreen(),
-      const SettingsScreen(),
     ];
 
     return Scaffold(
@@ -64,13 +65,6 @@ class _MainNavigationState extends State<MainNavigation> {
                   icon: Icons.favorite_rounded,
                   index: 1,
                   label: 'Match',
-                ),
-              ),
-              Expanded(
-                child: _tabItem(
-                  icon: Icons.person_rounded,
-                  index: 2,
-                  label: 'Profile',
                 ),
               ),
             ],
