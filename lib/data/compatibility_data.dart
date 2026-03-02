@@ -200,18 +200,18 @@ class CompatibilityData {
 
   static String premiumDescription(String first, String second, int score) {
     if (score >= 85) {
-      return '$first and $second have very strong energetic alignment. '
-          'You naturally support each other\'s emotional and life direction.';
+      return '$first ба $second маш хүчтэй энергийн нийцтэй байна. '
+          'Та хоёр бие биеийнхээ сэтгэл болон амьдралын чиглэлийг байгалиараа дэмждэг.';
     }
     if (score >= 70) {
-      return '$first and $second are stable together with strong growth potential. '
-          'Clear communication keeps this bond resilient over time.';
+      return '$first ба $second тогтвортой хослол бөгөөд өсөх боломж өндөр. '
+          'Тодорхой харилцаа энэ холбоог урт хугацаанд бат бөх байлгана.';
     }
     if (score >= 55) {
-      return '$first and $second are moderately compatible. '
-          'Listening carefully and setting expectations will improve this connection.';
+      return '$first ба $second дунд түвшний зохицолтой байна. '
+          'Сонсох чадвар болон хүлээлтээ зөв тохируулах нь харилцааг сайжруулна.';
     }
-    return '$first and $second may experience friction in rhythm and needs. '
-        'With patience and direct conversation, the relationship can still become steady.';
+    return '$first ба $second-ийн хэмнэл, хэрэгцээ заримдаа зөрчилдөж болно. '
+        'Тэвчээртэй, шууд ярилцсанаар энэ харилцаа тогтвортой болж чадна.';
   }
 }

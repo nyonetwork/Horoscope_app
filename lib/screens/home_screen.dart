@@ -27,13 +27,13 @@ class HomeScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(18, 18, 18, 120),
         children: [
           AppPageHeader(
-            section: 'Home',
-            title: 'Daily Horoscope',
-            subtitle: 'Your personalized reading for today.',
+            section: 'Нүүр',
+            title: 'Өдрийн зурлага',
+            subtitle: 'Өнөөдрийн танд зориулсан уншлага.',
             trailing: HeaderIconButton(
               icon: Icons.settings_rounded,
               onTap: onOpenSettings,
-              tooltip: 'Settings',
+              tooltip: 'Тохиргоо',
             ),
             chips: [
               HeaderChip(
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
               HeaderChip(icon: Icons.event_rounded, label: formattedDate),
               HeaderChip(
                 icon: Icons.local_fire_department_rounded,
-                label: '${appState.streakCount} day streak',
+                label: '${appState.streakCount} өдрийн цуврал',
                 color: const Color(0xFFFFD49D),
               ),
             ],
@@ -68,19 +68,18 @@ class HomeScreen extends StatelessWidget {
             _todayHeroCard(
               context,
               content:
-                  dailyData['today'] ?? 'Your cosmic guidance is warming up.',
+                  dailyData['today'] ?? 'Таны өнөөдрийн зурлага бэлтгэгдэж байна.',
               sign: sign,
-              mood: dailyData['today_mood'] ?? 'Mood is steady and clear.',
+              mood: dailyData['today_mood'] ?? 'Сэтгэл тогтуун, төв байна.',
               career:
-                  dailyData['today_career'] ??
-                  'Career/Job: focus on one meaningful task.',
+                  dailyData['today_career'] ?? 'Ажил: нэг чухал зорилт дээр төвлөр.',
               love:
                   dailyData['today_love'] ??
-                  'Love: a simple honest message helps today.',
+                  'Хайр: чин сэтгэлийн энгийн мессеж илүү үр дүнтэй.',
             ),
             const SizedBox(height: 20),
             const Text(
-              'More guidance',
+              'Нэмэлт зөвлөгөө',
               style: TextStyle(
                 color: Color(0xFFCED8FB),
                 fontWeight: FontWeight.w600,
@@ -90,36 +89,36 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 10),
             _forecastCard(
               context,
-              section: 'Yesterday',
-              content: dailyData['yesterday'] ?? 'No update for yesterday yet.',
+              section: 'Өчигдөр',
+              content: dailyData['yesterday'] ?? 'Өчигдрийн мэдээлэл алга.',
               icon: Icons.history_toggle_off_rounded,
               accent: const Color(0xFFBBD1FF),
               sign: sign,
               mood:
-                  dailyData['yesterday_mood'] ?? 'Mood was balanced and calm.',
+                  dailyData['yesterday_mood'] ?? 'Сэтгэл тайван, тэнцвэртэй байв.',
               career:
                   dailyData['yesterday_career'] ??
-                  'Career/Job: your consistency helped progress.',
+                  'Ажил: тууштай байдал ахиц авчирсан.',
               love:
                   dailyData['yesterday_love'] ??
-                  'Love: a warm check-in improved connection.',
+                  'Хайр: халуун дулаан мэндчилгээ ойртуулсан.',
             ),
             const SizedBox(height: 14),
             if (appState.isPremium)
               _forecastCard(
                 context,
-                section: 'Tomorrow',
-                content: dailyData['tomorrow'] ?? 'Tomorrow is still forming.',
+                section: 'Маргааш',
+                content: dailyData['tomorrow'] ?? 'Маргаашийн зурлага бэлтгэгдэж байна.',
                 icon: Icons.auto_awesome_rounded,
                 accent: const Color(0xFFE2C7FF),
                 sign: sign,
-                mood: dailyData['tomorrow_mood'] ?? 'Mood looks optimistic.',
+                mood: dailyData['tomorrow_mood'] ?? 'Сэтгэл өөдрөг байна.',
                 career:
                     dailyData['tomorrow_career'] ??
-                    'Career/Job: set one practical priority.',
+                    'Ажил: нэг бодит зорилт тодорхойл.',
                 love:
                     dailyData['tomorrow_love'] ??
-                    'Love: clear words can strengthen the bond.',
+                    'Хайр: тодорхой үг харилцааг бэхжүүлнэ.',
               )
             else
               _lockedTomorrowCard(context),
@@ -191,10 +190,10 @@ class HomeScreen extends StatelessWidget {
         children: [
           const Icon(Icons.bolt_rounded, color: Color(0xFFFFD49D)),
           const SizedBox(width: 10),
-          Expanded(
+          const Expanded(
             child: Text(
-              'Daily check-in is ready. Claim today to build your streak.',
-              style: const TextStyle(color: Color(0xFFE3EAFF), height: 1.45),
+              'Өдрийн check-in бэлэн байна. Өнөөдөр дарж цувралаа үргэлжлүүлээрэй.',
+              style: TextStyle(color: Color(0xFFE3EAFF), height: 1.45),
             ),
           ),
           const SizedBox(width: 10),
@@ -208,7 +207,7 @@ class HomeScreen extends StatelessWidget {
               ),
             ),
             onPressed: appState.markDailyCheckIn,
-            child: const Text('Check in'),
+            child: const Text('Бүртгэх'),
           ),
         ],
       ),
@@ -234,7 +233,7 @@ class HomeScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(24),
         onTap: () => _openReadingOverlay(
           context,
-          section: 'Today',
+          section: 'Өнөөдөр',
           sign: sign,
           general: content,
           emoji: '\u{2728}',
@@ -272,7 +271,7 @@ class HomeScreen extends StatelessWidget {
                   SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'Today',
+                      'Өнөөдөр',
                       style: TextStyle(
                         fontSize: 22,
                         fontWeight: FontWeight.w600,
@@ -311,13 +310,12 @@ class HomeScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Text(
-            'We could not load your daily reading.',
+            'Өдрийн зурлагыг ачаалж чадсангүй.',
             style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
           ),
           const SizedBox(height: 8),
           Text(
-            appState.horoscopeError ??
-                'Try again or refresh your sign from Settings.',
+            appState.horoscopeError ?? 'Дахин оролдоно уу эсвэл ордоо тохиргооноос шинэчилнэ үү.',
             style: const TextStyle(color: Color(0xFFE1E7FF), height: 1.5),
           ),
           const SizedBox(height: 12),
@@ -326,12 +324,12 @@ class HomeScreen extends StatelessWidget {
               ElevatedButton(
                 onPressed: () =>
                     appState.loadDailyHoroscope(forceRefresh: true),
-                child: const Text('Retry'),
+                child: const Text('Дахин оролдох'),
               ),
               const SizedBox(width: 10),
               OutlinedButton(
                 onPressed: onOpenSettings,
-                child: const Text('Open Settings'),
+                child: const Text('Тохиргоо нээх'),
               ),
             ],
           ),
@@ -358,7 +356,7 @@ class HomeScreen extends StatelessWidget {
           SizedBox(width: 12),
           Expanded(
             child: Text(
-              'Loading your daily reading...',
+              'Өдрийн зурлагыг ачаалж байна...',
               style: TextStyle(color: Color(0xFFE4EBFF), height: 1.4),
             ),
           ),
@@ -378,9 +376,9 @@ class HomeScreen extends StatelessWidget {
     required String career,
     required String love,
   }) {
-    final emoji = section == 'Yesterday'
+    final emoji = section == 'Өчигдөр'
         ? '\u{1FA90}'
-        : section == 'Tomorrow'
+        : section == 'Маргааш'
         ? '\u{1F319}'
         : '\u{2728}';
 
@@ -463,26 +461,26 @@ class HomeScreen extends StatelessWidget {
               Icon(Icons.lock_rounded, color: Color(0xFFFFD9A4)),
               SizedBox(width: 8),
               Text(
-                'Tomorrow (Premium)',
+                'Маргааш (Премиум)',
                 style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ],
           ),
           const SizedBox(height: 10),
           const Text(
-            'Tomorrow\'s reading is locked in free mode.',
+            'Маргаашийн уншлага үнэгүй хувилбарт түгжээтэй.',
             style: TextStyle(color: Color(0xFFF4E5F0), height: 1.5),
           ),
           const SizedBox(height: 6),
           const Text(
-            'Upgrade to Premium to unlock tomorrow.',
+            'Маргаашийн зурлагыг нээхийн тулд Премиум идэвхжүүлнэ үү.',
             style: TextStyle(color: Color(0xFFE6C9D8), fontSize: 12),
           ),
           const SizedBox(height: 14),
           TextButton.icon(
             onPressed: onOpenPremium,
             icon: const Icon(Icons.stars_rounded),
-            label: const Text('Upgrade to Premium'),
+            label: const Text('Премиум нээх'),
             style: TextButton.styleFrom(
               foregroundColor: const Color(0xFFFFD9A4),
               padding: EdgeInsets.zero,
@@ -505,7 +503,7 @@ class HomeScreen extends StatelessWidget {
   }) async {
     await showGeneralDialog<void>(
       context: context,
-      barrierLabel: 'Reading',
+      barrierLabel: 'Уншлага',
       barrierDismissible: true,
       barrierColor: const Color(0xB50A0F22),
       transitionDuration: const Duration(milliseconds: 260),
@@ -531,7 +529,7 @@ class HomeScreen extends StatelessWidget {
                           const SizedBox(width: 10),
                           Expanded(
                             child: Text(
-                              '$section Reading',
+                              '$section уншлага',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.w700,
@@ -551,15 +549,15 @@ class HomeScreen extends StatelessWidget {
                         padding: const EdgeInsets.fromLTRB(14, 14, 14, 18),
                         children: [
                           _detailBlock(
-                            title: 'General Horoscope',
+                            title: 'Ерөнхий зурлага',
                             content: general,
                           ),
                           const SizedBox(height: 12),
-                          _detailBlock(title: 'Mood', content: mood),
+                          _detailBlock(title: 'Сэтгэл', content: mood),
                           const SizedBox(height: 12),
-                          _detailBlock(title: 'Career', content: career),
+                          _detailBlock(title: 'Ажил', content: career),
                           const SizedBox(height: 12),
-                          _detailBlock(title: 'Love', content: love),
+                          _detailBlock(title: 'Хайр', content: love),
                         ],
                       ),
                     ),

@@ -27,15 +27,15 @@ Future<DateTime?> showBirthDatePickerSheet(
                 children: [
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(),
-                    child: const Text('Cancel'),
+                    child: const Text('Болих'),
                   ),
                   const Text(
-                    'Select birth date',
+                    'Төрсөн өдөр сонгох',
                     style: TextStyle(fontWeight: FontWeight.w700),
                   ),
                   TextButton(
                     onPressed: () => Navigator.of(context).pop(temp),
-                    child: const Text('Done'),
+                    child: const Text('Сонгох'),
                   ),
                 ],
               ),

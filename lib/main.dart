@@ -103,7 +103,7 @@ class _MyAppState extends State<MyApp> {
                           ),
                           const SizedBox(height: 12),
                           const Text(
-                            'Something went wrong',
+                            'Алдаа гарлаа',
                             style: TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w700,
@@ -120,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                           const SizedBox(height: 16),
                           ElevatedButton(
                             onPressed: _appState.retryInitialize,
-                            child: const Text('Retry'),
+                            child: const Text('Дахин оролдох'),
                           ),
                         ],
                       ),
@@ -136,7 +136,7 @@ class _MyAppState extends State<MyApp> {
                       CircularProgressIndicator(),
                       SizedBox(height: 12),
                       Text(
-                        'Loading your cosmic profile...',
+                        'Таны профайлыг ачаалж байна...',
                         style: TextStyle(color: AppColors.textLoadingBody),
                       ),
                     ],

@@ -12,11 +12,11 @@ class SettingsScreen extends StatelessWidget {
     final appState = AppStateScope.of(context);
     final birthdate = appState.birthdate;
     final birthdateLabel = birthdate == null
-        ? 'Not set'
+        ? 'Тохируулаагүй'
         : '${birthdate.year}.${birthdate.month.toString().padLeft(2, '0')}.${birthdate.day.toString().padLeft(2, '0')}';
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings'), centerTitle: false),
+      appBar: AppBar(title: const Text('Тохиргоо'), centerTitle: false),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 24),
         children: [
@@ -24,7 +24,7 @@ class SettingsScreen extends StatelessWidget {
             children: [
               _menuTile(
                 icon: Icons.person_outline_rounded,
-                title: 'Profile',
+                title: 'Профайл',
                 subtitle:
                     '${ZodiacUtils.displayName(appState.selectedZodiac)} • $birthdateLabel',
                 onTap: () => _openProfileSheet(context, appState),
@@ -36,22 +36,22 @@ class SettingsScreen extends StatelessWidget {
             children: [
               _menuTile(
                 icon: Icons.workspace_premium_rounded,
-                title: appState.isPremium ? 'Premium active' : 'Upgrade to Premium',
+                title: appState.isPremium ? 'Премиум идэвхтэй' : 'Премиум нээх',
                 subtitle: appState.isPremium
-                    ? 'Manage your premium plan'
-                    : 'Unlock tomorrow readings and detailed match insights',
+                    ? 'Премиум тохиргоогоо удирдах'
+                    : 'Маргаашийн уншлага, дэлгэрэнгүй зохицлыг нээх',
                 onTap: () => _openPremium(context),
               ),
               const Divider(height: 1),
               _menuTile(
                 icon: Icons.restore_rounded,
-                title: 'Restore purchase',
-                subtitle: 'Enable premium if already purchased',
+                title: 'Худалдан авалт сэргээх',
+                subtitle: 'Өмнөх худалдан авалтаа сэргээнэ',
                 onTap: () async {
                   await appState.setPremiumStatus(true); // placeholder restore
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Purchase restored.')),
+                      const SnackBar(content: Text('Худалдан авалт сэргээлээ.')),
                     );
                   }
                 },
@@ -63,8 +63,8 @@ class SettingsScreen extends StatelessWidget {
             children: [
               SwitchListTile.adaptive(
                 secondary: const Icon(Icons.motion_photos_off_rounded),
-                title: const Text('Reduce motion'),
-                subtitle: const Text('Calmer background and lighter effects'),
+                title: const Text('Хөдөлгөөн багасгах'),
+                subtitle: const Text('Дэвсгэр болон эффектийг зөөлрүүлнэ'),
                 value: appState.reduceMotion,
                 onChanged: (value) => appState.setReduceMotion(value),
               ),
@@ -75,21 +75,21 @@ class SettingsScreen extends StatelessWidget {
             children: [
               _menuTile(
                 icon: Icons.privacy_tip_outlined,
-                title: 'Privacy',
-                subtitle: 'Stored locally on this device',
+                title: 'Нууцлал',
+                subtitle: 'Мэдээлэл зөвхөн энэ төхөөрөмж дээр хадгалагдана',
                 onTap: () {
                   showDialog<void>(
                     context: context,
                     builder: (context) => AlertDialog(
-                      title: const Text('Privacy'),
+                      title: const Text('Нууцлал'),
                       content: const Text(
-                        'Your birth date and sign are stored locally on this device only. '
-                        'In this MVP version, no personal data is sent to a server.',
+                        'Таны төрсөн өдөр болон ордны мэдээлэл зөвхөн энэ төхөөрөмж дээр хадгалагдана. '
+                        'Энэ MVP хувилбарт хувийн мэдээлэл сервер рүү илгээгдэхгүй.',
                       ),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.of(context).pop(),
-                          child: const Text('OK'),
+                          child: const Text('Ойлголоо'),
                         ),
                       ],
                     ),
@@ -148,8 +148,8 @@ class SettingsScreen extends StatelessWidget {
         return StatefulBuilder(
           builder: (context, setState) {
             final birthdateText = selectedBirthdate == null
-                ? 'Set birth date'
-                : 'Birth date: ${selectedBirthdate!.year}.${selectedBirthdate!.month.toString().padLeft(2, '0')}.${selectedBirthdate!.day.toString().padLeft(2, '0')}';
+                ? 'Төрсөн өдрөө тохируулах'
+                : 'Төрсөн өдөр: ${selectedBirthdate!.year}.${selectedBirthdate!.month.toString().padLeft(2, '0')}.${selectedBirthdate!.day.toString().padLeft(2, '0')}';
             return SafeArea(
               child: Padding(
                 padding: EdgeInsets.only(
@@ -163,7 +163,7 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Profile',
+                      'Профайл',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w700,
@@ -174,7 +174,7 @@ class SettingsScreen extends StatelessWidget {
                       initialValue: selectedSign,
                       decoration: const InputDecoration(
                         border: OutlineInputBorder(),
-                        labelText: 'Zodiac sign',
+                        labelText: 'Орд',
                       ),
                       items: ZodiacUtils.allSigns
                           .map(
@@ -216,7 +216,7 @@ class SettingsScreen extends StatelessWidget {
                           }
                           if (context.mounted) Navigator.of(context).pop();
                         },
-                        child: const Text('Save'),
+                        child: const Text('Хадгалах'),
                       ),
                     ),
                   ],

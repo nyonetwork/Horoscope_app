@@ -126,7 +126,7 @@ class AppState extends ChangeNotifier {
         _dailyHoroscope = cached;
       } else {
         _dailyHoroscope = null;
-        _horoscopeError = 'Could not load your daily horoscope.';
+        _horoscopeError = 'Өдрийн зурлагыг ачаалж чадсангүй.';
       }
     } finally {
       _isHoroscopeLoading = false;

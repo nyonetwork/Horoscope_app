@@ -67,14 +67,14 @@ class _MainNavigationState extends State<MainNavigation> {
                 child: _tabItem(
                   icon: Icons.home_rounded,
                   index: 0,
-                  label: 'Home',
+                  label: 'Нүүр',
                 ),
               ),
               Expanded(
                 child: _tabItem(
                   icon: Icons.favorite_rounded,
                   index: 1,
-                  label: 'Match',
+                  label: 'Зохицол',
                 ),
               ),
             ],

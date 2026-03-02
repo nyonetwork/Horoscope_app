@@ -16,14 +16,13 @@ class _PremiumScreenState extends State<PremiumScreen> {
     if (_isProcessing) return;
     setState(() => _isProcessing = true);
 
-    // Placeholder flow until real billing SDK is integrated.
     await Future<void>.delayed(const Duration(milliseconds: 900));
     await appState.setPremiumStatus(true);
 
     if (!mounted) return;
     setState(() => _isProcessing = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Premium activated.')),
+      const SnackBar(content: Text('Премиум идэвхжлээ.')),
     );
     Navigator.of(context).pop();
   }
@@ -36,7 +35,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
     if (!mounted) return;
     setState(() => _isProcessing = false);
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Purchase restored.')),
+      const SnackBar(content: Text('Худалдан авалт сэргээлээ.')),
     );
   }
 
@@ -44,7 +43,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
   Widget build(BuildContext context) {
     final appState = AppStateScope.of(context);
     return Scaffold(
-      appBar: AppBar(title: const Text('Premium')),
+      appBar: AppBar(title: const Text('Премиум')),
       body: ListView(
         padding: const EdgeInsets.fromLTRB(16, 14, 16, 22),
         children: [
@@ -70,7 +69,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      appState.isPremium ? 'Premium Active' : 'Unlock Premium',
+                      appState.isPremium ? 'Премиум идэвхтэй' : 'Премиум нээх',
                       style: const TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.w700,
@@ -80,7 +79,7 @@ class _PremiumScreenState extends State<PremiumScreen> {
                 ),
                 const SizedBox(height: 10),
                 const Text(
-                  'Get tomorrow readings, detailed compatibility explanations, and future premium features.',
+                  'Маргаашийн уншлага, зохицлын дэлгэрэнгүй тайлбар болон цаашдын нэмэлт боломжуудыг нээнэ.',
                   style: TextStyle(color: Color(0xFFE2E8FF), height: 1.45),
                 ),
               ],
@@ -89,40 +88,40 @@ class _PremiumScreenState extends State<PremiumScreen> {
           const SizedBox(height: 14),
           _featureTile(
             icon: Icons.auto_awesome_rounded,
-            title: 'Tomorrow Horoscope',
-            subtitle: 'Unlock tomorrow section on Home with full details.',
+            title: 'Маргаашийн зурлага',
+            subtitle: 'Нүүр хуудсан дээрх маргаашийн хэсгийг нээнэ.',
           ),
           _featureTile(
             icon: Icons.favorite_rounded,
-            title: 'Detailed Match Insights',
-            subtitle: 'Read premium compatibility narrative after calculation.',
+            title: 'Зохицлын дэлгэрэнгүй',
+            subtitle: 'Тооцоо хийсний дараа дэлгэрэнгүй тайлбар уншина.',
           ),
           _featureTile(
             icon: Icons.rocket_launch_rounded,
-            title: 'Priority Features',
-            subtitle: 'You get first access as premium grows.',
+            title: 'Шинэ боломжид түрүүлж нэвтрэх',
+            subtitle: 'Шинэ боломжуудыг хамгийн түрүүнд ашиглана.',
           ),
           const SizedBox(height: 14),
           _planCard(
             id: 'monthly',
-            title: 'Monthly',
-            price: r'$2.99 / month',
-            description: 'Flexible option, cancel anytime.',
+            title: 'Сар бүр',
+            price: r'$2.99 / сар',
+            description: 'Уян хатан төлөвлөгөө, хүссэн үедээ цуцална.',
           ),
           const SizedBox(height: 10),
           _planCard(
             id: 'yearly',
-            title: 'Yearly',
-            price: r'$19.99 / year',
-            description: 'Best value for long-term daily use.',
-            badge: 'Save 44%',
+            title: 'Жил бүр',
+            price: r'$19.99 / жил',
+            description: 'Урт хугацаанд хамгийн ашигтай.',
+            badge: '44% хэмнэлт',
           ),
           const SizedBox(height: 10),
           _planCard(
             id: 'lifetime',
-            title: 'Lifetime',
-            price: r'$39.99 one-time',
-            description: 'Single payment, permanent unlock.',
+            title: 'Насан турш',
+            price: r'$39.99 нэг удаа',
+            description: 'Нэг удаа төлөөд бүрэн нээлттэй.',
           ),
           const SizedBox(height: 16),
           SizedBox(
@@ -136,18 +135,18 @@ class _PremiumScreenState extends State<PremiumScreen> {
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
                   : Text(
-                      appState.isPremium ? 'Premium Already Active' : 'Continue',
+                      appState.isPremium ? 'Премиум аль хэдийн идэвхтэй' : 'Үргэлжлүүлэх',
                     ),
             ),
           ),
           const SizedBox(height: 10),
           OutlinedButton(
             onPressed: _isProcessing ? null : () => _restorePurchase(appState),
-            child: const Text('Restore Purchase'),
+            child: const Text('Худалдан авалт сэргээх'),
           ),
           const SizedBox(height: 8),
           Text(
-            'Selected plan: ${_selectedPlan[0].toUpperCase()}${_selectedPlan.substring(1)}',
+            'Сонгосон төлөвлөгөө: ${_selectedPlan == 'monthly' ? 'Сар бүр' : _selectedPlan == 'yearly' ? 'Жил бүр' : 'Насан турш'}',
             textAlign: TextAlign.center,
             style: const TextStyle(color: Color(0xFFB8C4EA), fontSize: 12),
           ),

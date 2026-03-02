@@ -62,7 +62,6 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
       _score = null;
     });
 
-    // Brief loading state for better feedback and perceived interaction.
     await Future<void>.delayed(const Duration(milliseconds: 900));
 
     final mySign = ZodiacUtils.getZodiac(_myDate!);
@@ -99,13 +98,13 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
         padding: const EdgeInsets.fromLTRB(20, 28, 20, 120),
         children: [
           AppPageHeader(
-            section: 'Compatibility',
-            title: 'Compatibility Calculator',
-            subtitle: 'Calculate compatibility using two birth dates.',
+            section: 'Зохицол',
+            title: 'Зохицлын тооцоолуур',
+            subtitle: 'Хоёр төрсөн өдрөөр зохицлыг тооцоолно.',
             trailing: HeaderIconButton(
               icon: Icons.settings_rounded,
               onTap: widget.onOpenSettings,
-              tooltip: 'Settings',
+              tooltip: 'Тохиргоо',
             ),
             chips: [
               HeaderChip(icon: Icons.event_rounded, label: formattedDate),
@@ -117,7 +116,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
           ),
           const SizedBox(height: 20),
           _dateInput(
-            title: 'Your birth date',
+            title: 'Таны төрсөн өдөр',
             date: _myDate,
             onTap: () => _pickDate(
               currentValue: _myDate,
@@ -126,7 +125,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
           ),
           const SizedBox(height: 12),
           _dateInput(
-            title: 'Partner birth date',
+            title: 'Нөгөө хүний төрсөн өдөр',
             date: _partnerDate,
             onTap: () => _pickDate(
               currentValue: _partnerDate,
@@ -144,7 +143,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
                       width: 20,
                       child: CircularProgressIndicator(strokeWidth: 2),
                     )
-                  : const Text('Calculate'),
+                  : const Text('Тооцоолох'),
             ),
           ),
           if (_isCalculating) ...[
@@ -155,9 +154,8 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
             const SizedBox(height: 10),
             _placeholderCard(
               icon: Icons.favorite_outline_rounded,
-              title: 'Select both birth dates to calculate your match.',
-              subtitle:
-                  'Your result will appear here with score and explanation.',
+              title: 'Хоёр талаа төрсөн өдрөө сонгож зохицлоо тооцоолно уу.',
+              subtitle: 'Үр дүн нь энд хувь болон тайлбартай харагдана.',
             ),
           ],
           if (_score != null) ...[
@@ -199,7 +197,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Detailed explanation is available in Premium.',
+                          'Дэлгэрэнгүй тайлбар Премиум дээр нээлттэй.',
                           style: TextStyle(
                             color: Color(0xFFF0D9F9),
                             height: 1.45,
@@ -209,7 +207,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
                         TextButton.icon(
                           onPressed: widget.onOpenPremium,
                           icon: const Icon(Icons.workspace_premium_rounded),
-                          label: const Text('Unlock Premium'),
+                          label: const Text('Премиум нээх'),
                           style: TextButton.styleFrom(
                             foregroundColor: const Color(0xFFE8D6FF),
                             padding: EdgeInsets.zero,
@@ -233,7 +231,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
   }) {
     final sign = date == null ? null : ZodiacUtils.getZodiac(date);
     final text = date == null
-        ? 'Select a date'
+        ? 'Огноо сонгох'
         : '${date.year}.${date.month.toString().padLeft(2, '0')}.${date.day.toString().padLeft(2, '0')}';
 
     return InkWell(
@@ -364,7 +362,7 @@ class _CompatibilityScreenState extends State<CompatibilityScreen> {
             SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Connecting energies and calculating your match...',
+                'Энерги холбож, зохицол тооцоолж байна...',
                 style: TextStyle(color: Color(0xFFD8E0FF), height: 1.4),
               ),
             ),

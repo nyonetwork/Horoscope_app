@@ -69,7 +69,7 @@ class HeaderIconButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Tooltip(
-      message: tooltip ?? 'Open',
+      message: tooltip ?? 'Нээх',
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(14),

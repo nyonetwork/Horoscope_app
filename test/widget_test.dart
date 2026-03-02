@@ -8,8 +8,8 @@ void main() {
     await tester.pumpWidget(const MyApp());
     await tester.pump(const Duration(milliseconds: 600));
 
-    expect(find.text('Daily Horoscope'), findsOneWidget);
-    expect(find.text('Continue'), findsOneWidget);
+    expect(find.text('Өдрийн зурлага'), findsOneWidget);
+    expect(find.text('Үргэлжлүүлэх'), findsOneWidget);
   });
 }
 

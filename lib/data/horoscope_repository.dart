@@ -1,6 +1,6 @@
 import 'package:horoscope_app/data/horoscope_api_client.dart';
-import 'package:horoscope_app/data/horoscope_database_2026.dart';
 import 'package:horoscope_app/data/horoscope_data.dart';
+import 'package:horoscope_app/data/horoscope_database_2026.dart';
 import 'package:horoscope_app/utils/local_storage.dart';
 
 class HoroscopeRepository {
@@ -9,13 +9,17 @@ class HoroscopeRepository {
     DateTime? date,
   }) async {
     final targetDate = date ?? DateTime.now();
-    final local2026 = HoroscopeDatabase2026.getDailyBundle(
-      sign: sign,
-      date: targetDate,
-    );
-    if (local2026 != null) {
-      await LocalStorage.saveHoroscopeCache(sign, local2026);
-      return local2026;
+
+    // Use 2026 database (includes prewritten + template fallback) when date is in 2026
+    if (targetDate.year == 2026) {
+      final bundle = HoroscopeDatabase2026.getDailyBundle(
+        sign: sign,
+        date: targetDate,
+      );
+      if (bundle != null) {
+        await LocalStorage.saveHoroscopeCache(sign, bundle);
+        return bundle;
+      }
     }
 
     final remote = await HoroscopeApiClient.fetchDaily(sign: sign);

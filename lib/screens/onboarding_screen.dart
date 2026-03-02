@@ -95,16 +95,11 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                         children: [
                           const SizedBox(height: 24),
                           const Text(
-                            'Daily Horoscope',
+                            'Зурхай',
                             style: TextStyle(
                               fontSize: 30,
                               fontWeight: FontWeight.w700,
                             ),
-                          ),
-                          const SizedBox(height: 6),
-                          const Text(
-                            'Enter your birth date to detect your zodiac sign automatically.',
-                            style: TextStyle(color: Color(0xFFBAC2E6)),
                           ),
                           const SizedBox(height: 24),
                           Container(
@@ -122,7 +117,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 const Text(
-                                  'BIRTH DATE',
+                                  'ТӨРСӨН ӨДӨР',
                                   style: TextStyle(
                                     fontSize: 13,
                                     letterSpacing: 1.1,
@@ -163,7 +158,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                             ),
                                             const SizedBox(width: 8),
                                             Text(
-                                              'Your sign: ${ZodiacUtils.displayName(sign)}',
+                                              ZodiacUtils.displayName(sign),
                                               style: const TextStyle(
                                                 fontSize: 14,
                                                 fontWeight: FontWeight.w600,
@@ -227,7 +222,7 @@ class _OnboardingScreenState extends State<OnboardingScreen>
                                       ),
                                     )
                                   : const Text(
-                                      'Continue',
+                                      'Үргэлжлүүлэх',
                                       style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
@@ -322,7 +317,7 @@ class _SignReveal extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        '${ZodiacUtils.displayName(sign)} Chosen',
+                        '${ZodiacUtils.displayName(sign)} сонгогдлоо',
                         style: const TextStyle(
                           color: Color(0xFFE8EEFF),
                           fontSize: 21,

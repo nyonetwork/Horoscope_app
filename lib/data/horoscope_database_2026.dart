@@ -1,3 +1,5 @@
+import 'package:horoscope_app/data/horoscope_content_prewritten.dart';
+
 class HoroscopeDatabase2026 {
   static final Map<String, Map<String, Map<String, String>>> _database =
       _buildDatabase();
@@ -189,11 +191,14 @@ class HoroscopeDatabase2026 {
     for (var d = start; !d.isAfter(end); d = d.add(const Duration(days: 1))) {
       final dayMap = <String, Map<String, String>>{};
       for (final entry in _profiles.entries) {
-        dayMap[entry.key] = _buildBundle(
-          sign: entry.key,
-          profile: entry.value,
-          date: d,
-        );
+        final prewritten =
+            HoroscopeContentPrewritten.getBundle(entry.key, d);
+        dayMap[entry.key] = prewritten ??
+            _buildBundle(
+              sign: entry.key,
+              profile: entry.value,
+              date: d,
+            );
       }
       db[_dateKey(d)] = dayMap;
     }

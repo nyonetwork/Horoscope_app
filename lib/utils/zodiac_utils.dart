@@ -15,18 +15,18 @@
   ];
 
   static const Map<String, String> displayNames = {
-    'Aries': 'Aries',
-    'Taurus': 'Taurus',
-    'Gemini': 'Gemini',
-    'Cancer': 'Cancer',
-    'Leo': 'Leo',
-    'Virgo': 'Virgo',
-    'Libra': 'Libra',
-    'Scorpio': 'Scorpio',
-    'Sagittarius': 'Sagittarius',
-    'Capricorn': 'Capricorn',
-    'Aquarius': 'Aquarius',
-    'Pisces': 'Pisces',
+    'Aries': 'Хонь',
+    'Taurus': 'Үхэр',
+    'Gemini': 'Ихэр',
+    'Cancer': 'Мэлхий',
+    'Leo': 'Арслан',
+    'Virgo': 'Охин',
+    'Libra': 'Жинлүүр',
+    'Scorpio': 'Хилэнц',
+    'Sagittarius': 'Нум',
+    'Capricorn': 'Матар',
+    'Aquarius': 'Хумх',
+    'Pisces': 'Загас',
   };
 
   static const Map<String, String> symbols = {
