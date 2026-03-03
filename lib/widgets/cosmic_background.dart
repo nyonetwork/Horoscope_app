@@ -1,4 +1,4 @@
-﻿import 'dart:math' as math;
+import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
@@ -59,7 +59,9 @@ class _CosmicBackgroundState extends State<CosmicBackground>
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.maybeOf(context);
     final systemReduceMotion =
-        mediaQuery?.disableAnimations ?? mediaQuery?.accessibleNavigation ?? false;
+        mediaQuery?.disableAnimations ??
+        mediaQuery?.accessibleNavigation ??
+        false;
     final reduceMotion = widget.reduceMotion || systemReduceMotion;
 
     return AnimatedBuilder(
@@ -90,7 +92,7 @@ class _CosmicBackgroundState extends State<CosmicBackground>
                   ),
                 ),
               ),
-              widget.child,
+              Positioned.fill(child: widget.child),
             ],
           ),
         );
@@ -154,7 +156,10 @@ class _SpacePainter extends CustomPainter {
       ..color = const Color(0xFFFFD2A1).withValues(alpha: 0.07)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 110);
     canvas.drawCircle(
-      Offset(size.width * 0.86 - sceneDx * 0.7, size.height * 0.08 + sceneDy * 0.5),
+      Offset(
+        size.width * 0.86 - sceneDx * 0.7,
+        size.height * 0.08 + sceneDy * 0.5,
+      ),
       140,
       nebulaB,
     );
@@ -165,29 +170,33 @@ class _SpacePainter extends CustomPainter {
         ..shader = const LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [
-            Color(0x00000000),
-            Color(0x2B5D8CFF),
-            Color(0x3652A4D8),
-          ],
+          colors: [Color(0x00000000), Color(0x2B5D8CFF), Color(0x3652A4D8)],
         ).createShader(glowRect);
       canvas.drawRect(glowRect, glow);
     }
 
     final points = <Offset>[];
     for (final star in stars) {
-      final base = Offset(star.anchor.dx * size.width, star.anchor.dy * size.height);
+      final base = Offset(
+        star.anchor.dx * size.width,
+        star.anchor.dy * size.height,
+      );
       final phase = star.twinklePhase;
       final orbit = t * star.orbitSpeed + star.orbitOffset;
-      final x = base.dx +
+      final x =
+          base.dx +
           math.sin(orbit + phase) * star.drift * motion +
           math.sin(orbit * 0.5 + phase * 0.7) * (star.drift * 0.45) * motion +
           sceneDx * 0.65;
-      final y = base.dy +
-          math.cos(orbit * star.orbitStretch + phase) * (star.drift * 0.7) * motion +
+      final y =
+          base.dy +
+          math.cos(orbit * star.orbitStretch + phase) *
+              (star.drift * 0.7) *
+              motion +
           math.sin(orbit * 0.42 + phase) * (star.drift * 0.35) * motion +
           sceneDy * 0.65;
-      final alpha = 0.25 + 0.75 * ((math.sin(t * star.twinkleSpeed + phase) + 1) / 2);
+      final alpha =
+          0.25 + 0.75 * ((math.sin(t * star.twinkleSpeed + phase) + 1) / 2);
 
       final paint = Paint()..color = Colors.white.withValues(alpha: alpha);
       final center = Offset(x, y);
@@ -200,7 +209,8 @@ class _SpacePainter extends CustomPainter {
       ..strokeWidth = 0.95;
 
     final linkCount = math.min(points.length, 42);
-    final connectDistance = (88 + math.sin(t * 0.9) * 16) * (reduceMotion ? 0.95 : 1.0);
+    final connectDistance =
+        (88 + math.sin(t * 0.9) * 16) * (reduceMotion ? 0.95 : 1.0);
     for (var i = 0; i < linkCount; i++) {
       for (var j = i + 1; j < linkCount; j++) {
         final distance = (points[i] - points[j]).distance;
@@ -245,10 +255,7 @@ class _SpacePainter extends CustomPainter {
 
     final p = localProgress / activeWindow;
     final head = Offset(start.dx + travel.dx * p, start.dy + travel.dy * p);
-    final tail = Offset(
-      head.dx - travel.dx * 0.22,
-      head.dy - travel.dy * 0.22,
-    );
+    final tail = Offset(head.dx - travel.dx * 0.22, head.dy - travel.dy * 0.22);
 
     final opacity = (1 - p).clamp(0.0, 1.0) * 0.75;
     final trail = Paint()

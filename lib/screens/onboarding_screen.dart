@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:horoscope_app/screens/main_navigation.dart';
 import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/utils/zodiac_utils.dart';
 import 'package:horoscope_app/widgets/cosmic_background.dart';
@@ -55,11 +54,6 @@ class _OnboardingScreenState extends State<OnboardingScreen>
       }
 
       await appState.setBirthdate(_selectedDate);
-
-      if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => const MainNavigation()),
-      );
     } finally {
       if (mounted) {
         setState(() {

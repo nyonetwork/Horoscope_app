@@ -5,6 +5,27 @@ import 'package:horoscope_app/utils/app_state.dart';
 import 'package:horoscope_app/theme/app_colors.dart';
 
 void main() {
+  assert(() {
+    ErrorWidget.builder = (FlutterErrorDetails details) {
+      return Material(
+        color: const Color(0xCC2A0012),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16),
+            child: Text(
+              details.exceptionAsString(),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 13,
+                height: 1.4,
+              ),
+            ),
+          ),
+        ),
+      );
+    };
+    return true;
+  }());
   runApp(const MyApp());
 }
 
